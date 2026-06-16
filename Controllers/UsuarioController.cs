@@ -39,5 +39,79 @@ namespace API_LookUp.Controllers
 
             return Ok(Usuario);
         }
+
+        [HttpGet("ComprasDoUsuario")]
+        public async Task<ActionResult<IEnumerable<ComprasUsuario>>> GetComprasDoUsuario(int idUsuario)
+        {
+            var comprasDoUsuario = await _context.ComprasUsuario
+                .Where(c => c.IdUsuario == idUsuario)
+                .ToListAsync();
+
+            if (comprasDoUsuario == null || !comprasDoUsuario.Any())
+            {
+                return NotFound($"Não foi possível encontrar nem uma compra para esse usuario de id {idUsuario}");
+            }
+
+            return Ok(comprasDoUsuario);
+        }
+
+        [HttpPost("LogarUsuario")]
+        public async Task<ActionResult<Usuario>> LogarUsuario(string email, string senha)
+        {
+            var usuarioLogado = await _context.Usuario
+                .FirstOrDefaultAsync(u => u.Email == email && u.SenhaCadastrada == senha);
+
+            if (usuarioLogado == null)
+            {
+                return NotFound("Email ou senha incorretos.");
+            }
+
+            return Ok(usuarioLogado);
+        }
+
+        [HttpPost("RegistrarUsuario")]
+        public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
+        {
+            var usuarioNovo = new Usuario
+            {
+                IdUsuario = usuario.IdUsuario,
+                Nome = usuario.Nome,
+                Email = usuario.Email,
+                Telefone = usuario.Telefone,
+                SenhaCadastrada = usuario.SenhaCadastrada
+            };
+            _context.Usuario.Add(usuario);
+            await _context.SaveChangesAsync();
+
+            return Ok(usuarioNovo);
+        }
+
+        [HttpPost("logoutUsuario")]
+        public async Task<ActionResult> LogoutUsuario(int idUsuario)
+        {
+            var usuario = await _context.Usuario.FindAsync(idUsuario);
+            if (usuario == null)
+            {
+                return NotFound($"Não foi encontrado usuario com o id {idUsuario}");
+            }
+
+            // Aqui você pode implementar a lógica de logout, como limpar tokens ou sessões, dependendo da sua implementação de autenticação.
+
+            return Ok("Usuário deslogado com sucesso.");
+        }
+
+        [HttpPost("SlavarFotoTesteDeIA")]
+        public async Task<ActionResult> SalvarFotoTesteDeIA(int idUsuario, string urlFoto)
+        {
+            var usuario = await _context.Usuario.FindAsync(idUsuario);
+            if (usuario == null)
+            {
+                return NotFound($"Não foi encontrado usuario com o id {idUsuario}");
+            }
+
+            // Aqui você pode implementar a lógica para salvar a URL da foto no banco de dados ou em um serviço de armazenamento, dependendo da sua arquitetura.
+
+            return Ok("Foto salva com sucesso.");
+        }
     }
 }
