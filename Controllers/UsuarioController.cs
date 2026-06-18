@@ -100,7 +100,7 @@ namespace API_LookUp.Controllers
             return Ok("Usuário deslogado com sucesso.");
         }
 
-        [HttpPost("SlavarFotoTesteDeIA")]
+        [HttpPost("SalvarFotoTesteDeIA")]
         public async Task<ActionResult> SalvarFotoTesteDeIA(int idUsuario, string urlFoto)
         {
             var usuario = await _context.Usuario.FindAsync(idUsuario);
