@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using API_LookUp.Models;
 using API_LookUp.DTOs;
 using API_LookUp.Repository;
+using API_LookUp.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace API_LookUp.Controllers
@@ -41,23 +42,26 @@ namespace API_LookUp.Controllers
         }
 
         [HttpPost("AdicionarProduto")]
-        public async Task<ActionResult<Produtos>> PostProdutos(Produtos Produto)
+        public async Task<ActionResult<Produtos>> PostProdutos(ProdutoAdicionarDTO Produto)
         {
-            var produtoNovo =new Produtos
+            var produtoNovo = new Produtos
             {
-                IdProduto = Produto.IdProduto,
                 Nome = Produto.Nome,
-                Modelo = Produto.Modelo,
-                Imagem = Produto.Imagem,
-                Preco = Produto.Preco,
-                OfertaDisponivel = Produto.OfertaDisponivel,
-                QuantidadeEstoque = Produto.QuantidadeEstoque
-            };
-            _context.Produtos.Add(Produto);
-            await _context.SaveChangesAsync();
-
-            return Ok(produtoNovo);
-        }
+                Descricao = Produto.Descricao,            // adicionado
+            Modelo = Produto.Modelo,
+            Imagem = Produto.Imagem,
+            Preco = Produto.Preco,
+            QuantidadeEstoque = Produto.QuantidadeEstoque,
+            OfertaDisponivel = Produto.OfertaDisponivel,
+            OfertaDesconto = Produto.OfertaDesconto   // adicionado
+            // IdProduto não é atribuído – o banco gera automaticamente
+        };
+    
+        _context.Produtos.Add(produtoNovo);
+        await _context.SaveChangesAsync();
+    
+        return Ok(produtoNovo);
+    }
 
         [HttpGet("BuscarProdutosNome")]
         public async Task<ActionResult<IEnumerable<Produtos>>> GetBuscarProdutosNome([FromQuery] string search = null)
