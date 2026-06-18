@@ -58,5 +58,35 @@ namespace API_LookUp.Controllers
 
             return Ok(produtoNovo);
         }
+
+        [HttpGet("BuscarProdutosNome")]
+        public async Task<ActionResult<IEnumerable<Produtos>>> GetBuscarProdutosNome([FromQuery] string search = null)
+        {
+            var query = _context.Produtos.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var termo = search.Trim();
+
+                if (Enum.TryParse(typeof(ModeloProduto), termo, true, out var modeloEnum))
+                {
+                    query = query.Where(p =>
+                        p.Nome.ToLower().Contains(termo.ToLower()) ||
+                        p.Descricao.ToLower().Contains(termo.ToLower()) ||
+                        p.Modelo.Equals(modeloEnum)
+                    );
+                }
+                else
+                {
+                    query = query.Where(p =>
+                        p.Nome.ToLower().Contains(termo.ToLower()) ||
+                        p.Descricao.ToLower().Contains(termo.ToLower())
+                    );
+                }
+            }
+
+            var lista = await query.ToListAsync();
+            return Ok(lista);
+        }
     }
 }
