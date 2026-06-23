@@ -92,5 +92,12 @@ namespace API_LookUp.Controllers
             var lista = await query.ToListAsync();
             return Ok(lista);
         }
+
+        [HttpGet("BuscarProdutosPorModelo")]
+        public async Task<ActionResult<IEnumerable<Produtos>>> GetBuscarProdutosPorModelo([FromQuery] ModeloProduto modelo)
+        {
+            var lista = await _context.Produtos.Where(p => p.Modelo == modelo).ToListAsync();
+            return Ok(lista);
+        }
     }
 }
