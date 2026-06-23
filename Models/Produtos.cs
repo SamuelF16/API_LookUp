@@ -15,13 +15,13 @@ namespace API_LookUp.Models
         public int IdProduto { get; set; }
         
         [Column("nome")]
-        public string Nome { get; set; }
+        public string Nome { get; set; } = null!;
         
         [Column("descricao")]
-        public string Descricao { get; set; }
+        public string Descricao { get; set; } = null!;
         
         [Column("imagem")]
-        public string Imagem { get; set; }
+        public string Imagem { get; set; } = null!;
         
         [Column("modelo")]
         public ModeloProduto Modelo { get; set; }
@@ -39,6 +39,6 @@ namespace API_LookUp.Models
         public int? OfertaDesconto { get; set; } /*Não sei se é int*/
 
         /*Chave Estrangeira e Relacionamentos*/
-        public virtual ICollection<Itens> Itens { get; set; }
+        public virtual ICollection<Itens> Itens { get; set; } = new List<Itens>();
     }
 }

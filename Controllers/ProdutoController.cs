@@ -43,20 +43,10 @@ namespace API_LookUp.Controllers
         [HttpPost("AdicionarProduto")]
         public async Task<ActionResult<Produtos>> PostProdutos(Produtos Produto)
         {
-            var produtoNovo =new Produtos
-            {
-                IdProduto = Produto.IdProduto,
-                Nome = Produto.Nome,
-                Modelo = Produto.Modelo,
-                Imagem = Produto.Imagem,
-                Preco = Produto.Preco,
-                OfertaDisponivel = Produto.OfertaDisponivel,
-                QuantidadeEstoque = Produto.QuantidadeEstoque
-            };
             _context.Produtos.Add(Produto);
             await _context.SaveChangesAsync();
 
-            return Ok(produtoNovo);
+            return CreatedAtAction(nameof(GetProdutosId), new { id = Produto.IdProduto }, Produto);
         }
     }
 }

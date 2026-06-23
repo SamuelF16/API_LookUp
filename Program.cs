@@ -1,3 +1,4 @@
+using API_LookUp.Models;
 using API_LookUp.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -15,6 +16,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySQL(  
         builder.Configuration.GetConnectionString("DefaultConnection")!
     ));
+
+// Configure Gemini Service
+builder.Services.Configure<GeminiOptions>(builder.Configuration.GetSection("Gemini"));
+builder.Services.AddTransient<IGeminiService, GeminiService>();
+builder.Services.AddHttpClient(); // Adiciona HttpClient para injeção de dependência
 
 var app = builder.Build();
 

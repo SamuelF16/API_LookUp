@@ -15,8 +15,8 @@ namespace API_LookUp.DTOs
         // public decimal Subtotal => PrecoUnitario * QuantidadeProdutos;
         
         /* Produto */
-        public string NomeProduto { get; set; }
-        public string ImagemProduto { get; set; }
+        public string NomeProduto { get; set; } = null!;
+        public string ImagemProduto { get; set; } = null!;
         public decimal PrecoProduto { get; set; }
         public int? OfertaDescontoProduto { get; set; }
         // public decimal PrecoComDescontoProduto { get; set; }
